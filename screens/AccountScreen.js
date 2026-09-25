@@ -1,24 +1,25 @@
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { Button, TouchableHighlight } from 'react-native';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import HighlightButton from '../components/HighlightButton';
 import InputText from '../components/InputText';
-import styles from '../styles/styles';
 
 
 export default function AccountScreen(){
   return(
-    <SafeAreaProvider>
-    <SafeAreaView style = {styles.container}>
-      <View style={{alignItems: 'center'}}>
+      <View style={styles.container}>
          <InputText placeholder={"Username"}/>
          <InputText placeholder={"Password"}/>
          <InputText placeholder={"Password Confirmation"}/>
          <HighlightButton label= "Create my account"/>
       </View>
-    </SafeAreaView>
-    </SafeAreaProvider>
-
-
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+
+});
