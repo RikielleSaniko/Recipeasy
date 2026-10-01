@@ -1,38 +1,78 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { RadioGroup } from 'react-native-radio-buttons-group';
 import { Picker } from '@react-native-picker/picker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HighlightButton from '../components/HighlightButton';
 import InputText from '../components/InputText';
 import EMPTY_RECIPE from '../model/recipe';
+import ToastManager, {Toast} from 'toastify-react-native';
 
-
-export default function RecipeScreen() {
+export default function RecipeScreen({navigation, route}) {
   const options = [
-    { id: '1', label: 'Breakfast', value: '1', labelStyle: { color: 'white' }, borderColor: 'white' },
-    { id: '2', label: 'Lunch', value: '2', labelStyle: { color: 'white' }, borderColor: 'white' },
-    { id: '3', label: 'Dinner', value: '3', labelStyle: { color: 'white' }, borderColor: 'white' }
+    { id: 1, label: 'Breakfast', value: '1', labelStyle: { color: 'white' }, borderColor: 'white' },
+    { id: 2, label: 'Lunch', value: '2', labelStyle: { color: 'white' }, borderColor: 'white' },
+    { id: 3, label: 'Dinner', value: '3', labelStyle: { color: 'white' }, borderColor: 'white' }
   ];
 
-  const hourOptions = Array.from({ length: 25 }, (_, i) => ({
+  const hourOptions = Array.from({ length: 13 }, (_, i) => ({
     id: i,
     label: `${i} h`,
     value: i,
   }));
 
-  const minuteOptions = Array.from({ length: 25 }, (_, i) => ({
+  const minuteOptions = Array.from({ length: 60 }, (_, i) => ({
     id: i,
     label: `${i} mins`,
     value: i,
   }));
 
+
   const [recipe, setRecipe] = useState(EMPTY_RECIPE);
+
+  useEffect(() =>{
+    const recipeParam = route.params?.recipe
+    if(recipeParam != undefined){
+      setRecipe(recipeParam);
+
+    }
+  }, [route.params?.recipe])
+
+  const ajout = route.params?.recipe == undefined;
+
+  function handleSave(){
+
+    let errors = ""
+
+    if(recipe.name == ""){
+      errors += "Le nom est requis!\n"
+    }
+
+    if(recipe.category == null){
+      errors += "La catégorie est requise!\n"
+    }
+
+    console.log(recipe)
+    if(recipe.durationHours == 0 && recipe.durationMinutes == 0){
+      errors += "La durée doit être > 0"
+    }
+
+    if(errors == ""){
+      navigation.popTo('RecipeList', {recipe});
+    }
+    else{
+      Toast.info(errors)
+    }
+  }
+
+  function handleDelete(){
+    navigation.popTo('RecipeList')
+  }
 
   return (
     <View style={styles.recipe_content}>
-      <RadioGroup radioButtons={options} layout='row' containerStyle={{justifyContent: "space-between", marginTop: 20}} onPress = {recipe} selectedId = {recipe.category.toString()}/>
+      <RadioGroup radioButtons={options} layout='row' containerStyle={{justifyContent: "space-between", marginTop: 20}} onPress ={(category) => setRecipe({ ...recipe, category })} selectedId = {recipe.category}/>
 
-      <InputText placeholder='Name' onChangeText={recipe} value = {recipe.name}/>
+      <InputText placeholder='Name' onChangeText={(name) => setRecipe({ ...recipe, name })} value = {recipe.name}/>
 
       <View style={styles.durationContainer}>
         <Text style={{ color: 'white' }}>Duration</Text>
@@ -55,7 +95,7 @@ export default function RecipeScreen() {
 
         <Picker
           selectedValue={recipe.durationMinutes}
-          onValueChange={(durationMinutes) => setDuration({ ...recipe, durationMinutes})}
+          onValueChange={(durationMinutes) => setRecipe({ ...recipe, durationMinutes})}
           style={styles.durationPicker}
           dropdownIconColor='white'
         >
@@ -68,13 +108,18 @@ export default function RecipeScreen() {
       </View>
 
       <InputText
-        onChangeText = {recipe}
+        onChangeText = {(description) => setRecipe({ ...recipe, description })}
         value = {recipe.description}
         multiline={true}
         placeholder='Description'
         style={styles.textarea}/>
 
-      <HighlightButton label="Save" />
+        { ajout ? (
+          <HighlightButton label="Save" onPress={handleSave} />
+        ):(
+          <HighlightButton label="Delete" onPress={handleDelete} />
+        )}
+      <ToastManager/>
     </View>
   );
 }

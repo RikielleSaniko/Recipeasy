@@ -1,7 +1,7 @@
 const EMPTY_RECIPE = {
-  category: 1,
-  name: "Rikielle",
-  durationHours: 10,
+  category: null,
+  name: "",
+  durationHours: 0,
   durationMinutes: 0,
   description: ""
 };

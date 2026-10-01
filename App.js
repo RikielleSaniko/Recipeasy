@@ -4,7 +4,7 @@ import LoginScreen from './screens/LoginScreen';
 import AccountScreen from './screens/AccountScreen';
 import RecipeScreen from './screens/RecipeScreen';
 import RecipeListScreen from './screens/RecipeListScreen';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,25 +22,22 @@ export default function App() {
           headerTintColor: 'white',
         }}
       >
-        <Stack.Screen name="Login" component={ LoginScreen }/>
+        <Stack.Screen name="Login" component={ LoginScreen } options = {{headerBackVisible: false}}/>
         <Stack.Screen name="SignUp" component={ AccountScreen } />
         <Stack.Screen name="RecipeForm" component={ RecipeScreen } />
-        <Stack.Screen name="RecipeList" component={ RecipeListScreen }  options={{headerBackVisible: false}}/>
+        <Stack.Screen 
+          name="RecipeList" 
+          component={ RecipeListScreen }  
+          options={({ navigation }) => ({
+            headerBackVisible: false,
+            headerRight: () => (
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={{ color: 'white', marginRight: 8 }}>Log out</Text>
+              </TouchableOpacity>
+            )
+          })}
+        />
         </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#387E7F',
-    width: '100%',
-    maxWidth: 500,
-    padding : 16,
-  },
-  content: {
-    flex: 1,
-    width: '100%',
-  },
-});
