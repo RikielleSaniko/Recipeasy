@@ -1,21 +1,33 @@
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
 import AccountScreen from './screens/AccountScreen';
 import RecipeScreen from './screens/RecipeScreen';
+import RecipeListScreen from './screens/RecipeListScreen';
 import { StyleSheet, View } from 'react-native';
+
+const Stack = createNativeStackNavigator();
 
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-         { /*<LoginScreen/>*/ }
-        { /*<AccountScreen/> */}
-        { /*<RecipeScreen/>*/ }
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+     
+        <NavigationContainer>
+      <Stack.Navigator 
+        initialRouteName="Login"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#E07A5F'
+          },
+          headerTintColor: 'white',
+        }}
+      >
+        <Stack.Screen name="Login" component={ LoginScreen }/>
+        <Stack.Screen name="SignUp" component={ AccountScreen } />
+        <Stack.Screen name="RecipeForm" component={ RecipeScreen } />
+        <Stack.Screen name="RecipeList" component={ RecipeListScreen }  options={{headerBackVisible: false}}/>
+        </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -30,8 +42,5 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
   },
 });

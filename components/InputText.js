@@ -1,8 +1,12 @@
 import { StyleSheet, TextInput} from 'react-native';
 
-export default function InputText({placeholder}){
+export default function InputText({style, ...otherProps}){
   return(
-    <TextInput placeholder={placeholder} placeholderTextColor= 'white' style = {styles.form} />
+    <TextInput 
+      placeholderTextColor= 'white' 
+      style = {[styles.form, style]}
+      {...otherProps}
+    />
   );
 }
 
@@ -14,6 +18,6 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 10,
     margin: 12,
-    width : '100%',
+    width: "90%"
   },
 });

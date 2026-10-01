@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { RadioGroup } from 'react-native-radio-buttons-group';
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import HighlightButton from '../components/HighlightButton';
 import InputText from '../components/InputText';
+import EMPTY_RECIPE from '../model/recipe';
 
 
 export default function RecipeScreen() {
@@ -13,33 +14,32 @@ export default function RecipeScreen() {
     { id: '3', label: 'Dinner', value: '3', labelStyle: { color: 'white' }, borderColor: 'white' }
   ];
 
-  const hourOptions = [
-    { id: '0', label: '0 h', value: '0' },
-    { id: '1', label: '1 h', value: '1' },
-    { id: '2', label: '2 h', value: '2' },
-  ];
+  const hourOptions = Array.from({ length: 25 }, (_, i) => ({
+    id: i,
+    label: `${i} h`,
+    value: i,
+  }));
 
-  const minuteOptions = [
-    { id: '0', label: '0 mins', value: '0' },
-    { id: '15', label: '15 mins', value: '15' },
-    { id: '30', label: '30 mins', value: '30' },
-    { id: '45', label: '45 mins', value: '45' },
-  ];
+  const minuteOptions = Array.from({ length: 25 }, (_, i) => ({
+    id: i,
+    label: `${i} mins`,
+    value: i,
+  }));
 
-  const [duration, setDuration] = useState({ hours: '0', minutes: '0' });
+  const [recipe, setRecipe] = useState(EMPTY_RECIPE);
 
   return (
     <View style={styles.recipe_content}>
-      <RadioGroup radioButtons={options} layout='row' />
+      <RadioGroup radioButtons={options} layout='row' containerStyle={{justifyContent: "space-between", marginTop: 20}} onPress = {recipe} selectedId = {recipe.category.toString()}/>
 
-      <InputText placeholder='Name' />
+      <InputText placeholder='Name' onChangeText={recipe} value = {recipe.name}/>
 
       <View style={styles.durationContainer}>
         <Text style={{ color: 'white' }}>Duration</Text>
 
         <Picker
-          selectedValue={duration.hours}
-          onValueChange={(value) => setDuration({ ...duration, hours: value })}
+          selectedValue={recipe.durationHours}
+          onValueChange={(durationHours) => setRecipe({ ...recipe, durationHours })}
           style={styles.durationPicker}
           dropdownIconColor='white'
         >
@@ -54,8 +54,8 @@ export default function RecipeScreen() {
         <Text style={{ color: 'white' }}>:</Text>
 
         <Picker
-          selectedValue={duration.minutes}
-          onValueChange={(value) => setDuration({ ...duration, minutes: value })}
+          selectedValue={recipe.durationMinutes}
+          onValueChange={(durationMinutes) => setDuration({ ...recipe, durationMinutes})}
           style={styles.durationPicker}
           dropdownIconColor='white'
         >
@@ -67,12 +67,12 @@ export default function RecipeScreen() {
         </Picker>
       </View>
 
-      <TextInput
+      <InputText
+        onChangeText = {recipe}
+        value = {recipe.description}
         multiline={true}
         placeholder='Description'
-        placeholderTextColor='white'
-        style={styles.textarea}
-      />
+        style={styles.textarea}/>
 
       <HighlightButton label="Save" />
     </View>
@@ -86,26 +86,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'flex-start',
     width: '100%',
+    backgroundColor: "#387E7F",
   },
 
   textarea: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: 'white',
     borderRadius: 5,
     padding: 10,
     marginTop: 5,
-    width: '100%',
     color: 'white',
     textAlignVertical: 'top',
     placeholderTextColor: 'white',
+    height: 500
   },
 
   durationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    paddingHorizontal : 10,
   },
 
   durationPicker: {

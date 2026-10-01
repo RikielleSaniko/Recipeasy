@@ -1,9 +1,9 @@
 import {TouchableHighlight } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function HighlightButton({label}){
+export default function HighlightButton({label, onPress}){
   return(
-    <TouchableHighlight style={{alignSelf: 'center'}}>
+    <TouchableHighlight style={{alignSelf: 'center'}} onPress = {onPress}>
       <View style={styles.button}>
         <Text style={{color: 'white'}}>{label}</Text>
       </View>
