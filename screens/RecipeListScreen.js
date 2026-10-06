@@ -16,6 +16,27 @@ const SEED = [
     {id : '10', category: 1, name: "oeuf", durationHours: 0, durationMinutes: 10, description: "oooooooooooooooooo"}
   ]
 
+  function durationFormat(hours, minutes){
+  return `${hours}h${String(minutes).padStart(2, '0')}`;
+}
+
+function RecipeItem({recipe, onPress}){
+  const {name, durationHours, durationMinutes, description} = recipe;
+
+  return(
+      <View style={styles.item}>
+        <View style={styles.left}>
+          <Text style={styles.duration}>{durationFormat(durationHours, durationMinutes)}</Text>
+        </View>
+
+        <View style={styles.right}>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.description} numberOfLines={1}>{description}</Text>
+        </View>
+      </View>
+  );
+}
+
 
 export default function RecipeListScreen({navigation, route}){
   const [recipes, setReceipes] = useState(SEED);
@@ -45,10 +66,16 @@ export default function RecipeListScreen({navigation, route}){
 
   return(
     <View style = {styles.container}>
-      <Text style = { styles.headerText} >List page</Text>
       <FlatList
         data={sortedRecipes}
-        renderItem={({item}) => <Text style={styles.text}>{item.name}</Text>}
+        renderItem={({item}) => <RecipeItem recipe={item}/>}
+        ItemSeparatorComponent={() => <View style={styles.separator}/>}
+        ListEmptyComponent={() => (
+          <View style={styles.empty}>
+            <Text style={styles.textEmpty}>No recipes yet...</Text>
+          </View>
+        )}
+        contentContainerStyle={{flexGrow: 1}}
       />
       <HighlightButton label = "View" onPress = {handleView} />
       <HighlightButton label = "Add" onPress = {handleAdd}/>
@@ -66,15 +93,55 @@ const styles = StyleSheet.create({
     backgroundColor: "#387E7F",
   },
 
-  headerText:{
-    color : 'white',
-    fontSize : 40,
-    justifyContent : 'flex-start',
+  item: {
+    flexDirection : 'row',
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
   },
 
-  text: {
-    color : 'white',
+  empty: {
+    flex : 1,
     alignItems : 'center',
-    fontSize : 20,
+    justifyContent : 'center',
   },
+
+  textEmpty: {
+    color: 'lightgray',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
+  separator: {
+    height: 1,
+    backgroundColor: 'lightgray',
+  },
+
+  left: {
+    alignItems: 'center',
+    width: 48,
+  },
+
+  right: {
+    flex: 1,
+  },
+
+  name: {
+  color: 'white',
+  fontWeight: 'bold',
+  fontSize: 20,
+},
+
+description: {
+  color: 'lightgray',
+  fontSize: 15,
+},
+
+duration: {
+    color: 'lightgray',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+
+
 });
