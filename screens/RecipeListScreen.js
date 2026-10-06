@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { FlatList, StyleSheet, Text, View} from 'react-native';
 import HighlightButton from '../components/HighlightButton';
 import ToastManager, {Toast} from 'toastify-react-native';
 
@@ -41,11 +41,15 @@ export default function RecipeListScreen({navigation, route}){
     navigation.navigate('RecipeForm');
   }
 
+  const sortedRecipes = [...recipes].sort((r1, r2) => r1.name.localeCompare(r2.name));
 
   return(
     <View style = {styles.container}>
       <Text style = { styles.headerText} >List page</Text>
-      <Text style = {styles.text}> {JSON.stringify(recipes.sort((r1, r2) => r1.name.localeCompare(r2.name)) )}</Text>
+      <FlatList
+        data={sortedRecipes}
+        renderItem={({item}) => <Text style={styles.text}>{item.name}</Text>}
+      />
       <HighlightButton label = "View" onPress = {handleView} />
       <HighlightButton label = "Add" onPress = {handleAdd}/>
 
@@ -59,9 +63,6 @@ const styles = StyleSheet.create({
   container: {
     flex : 1,
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
     backgroundColor: "#387E7F",
   },
 
