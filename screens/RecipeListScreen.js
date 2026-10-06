@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View} from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 import HighlightButton from '../components/HighlightButton';
 import ToastManager, {Toast} from 'toastify-react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -33,6 +33,7 @@ function RecipeItem({recipe, onPress}){
   const {icon, color} = CATEGORIES[category];
 
   return(
+    <TouchableHighlight onPress={onPress} underlayColor="lightgray">
       <View style={styles.item}>
         <View style={styles.left}>
           <MaterialIcons name={icon} size={25} color={color}/>
@@ -44,6 +45,7 @@ function RecipeItem({recipe, onPress}){
           <Text style={styles.description} numberOfLines={1}>{description}</Text>
         </View>
       </View>
+    </TouchableHighlight>
   );
 }
 
@@ -59,15 +61,6 @@ export default function RecipeListScreen({navigation, route}){
     }
   }, [route.params])
 
-  function handleView() {
-    if (recipes.length === 0) {
-      Toast.info('Liste vide!');
-    } else {
-      const randomIndex = Math.floor(Math.random() * recipes.length);
-      navigation.navigate('RecipeForm', {recipe: recipes[randomIndex]});
-    }
-  }
-
   function handleAdd() {
     navigation.navigate('RecipeForm');
   }
@@ -78,7 +71,12 @@ export default function RecipeListScreen({navigation, route}){
     <View style = {styles.container}>
       <FlatList
         data={sortedRecipes}
-        renderItem={({item}) => <RecipeItem recipe={item}/>}
+        renderItem={({item}) => (
+          <RecipeItem 
+            recipe={item}
+            onPress={() => navigation.navigate('RecipeForm', {recipe: item})}
+          />
+        )}
         ItemSeparatorComponent={() => <View style={styles.separator}/>}
         ListEmptyComponent={() => (
           <View style={styles.empty}>
@@ -87,7 +85,6 @@ export default function RecipeListScreen({navigation, route}){
         )}
         contentContainerStyle={{flexGrow: 1}}
       />
-      <HighlightButton label = "View" onPress = {handleView} />
       <HighlightButton label = "Add" onPress = {handleAdd}/>
 
       <ToastManager/>
