@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableHighlight} from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableHighlight, TouchableOpacity} from 'react-native';
 import HighlightButton from '../components/HighlightButton';
 import ToastManager, {Toast} from 'toastify-react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -85,8 +85,9 @@ export default function RecipeListScreen({navigation, route}){
         )}
         contentContainerStyle={{flexGrow: 1}}
       />
-      <HighlightButton label = "Add" onPress = {handleAdd}/>
-
+      <TouchableOpacity style={styles.plus} onPress={handleAdd}>
+        <MaterialIcons name="add" size={28} color="white" />
+      </TouchableOpacity>
       <ToastManager/>
     </View>
   );
@@ -148,6 +149,19 @@ duration: {
     color: 'lightgray',
     fontWeight: 'bold',
     fontSize: 15,
+  },
+
+  plus: {
+  position: 'absolute',
+  right: 16,
+  bottom: 16,
+  width: 56,
+  height: 56,
+  borderRadius: 28,
+  backgroundColor: 'orange',
+  justifyContent: 'center',
+  alignItems: 'center',
+  elevation: 6,
   },
 
 
