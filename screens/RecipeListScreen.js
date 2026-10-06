@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View} from 'react-native';
 import HighlightButton from '../components/HighlightButton';
 import ToastManager, {Toast} from 'toastify-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const SEED = [
     {id : '1', category: 1, name: "Pancakes", durationHours: 0, durationMinutes: 20, description: "ppppppppppppppppp"},
@@ -16,16 +17,25 @@ const SEED = [
     {id : '10', category: 1, name: "oeuf", durationHours: 0, durationMinutes: 10, description: "oooooooooooooooooo"}
   ]
 
+  const CATEGORIES = {
+    1: {icon: 'free-breakfast', color: 'orange'},
+    2: {icon: 'lunch-dining', color: 'lime'},
+    3: {icon: 'dinner-dining', color: 'blue'},
+  };
+
+
   function durationFormat(hours, minutes){
   return `${hours}h${String(minutes).padStart(2, '0')}`;
 }
 
 function RecipeItem({recipe, onPress}){
-  const {name, durationHours, durationMinutes, description} = recipe;
+  const {category, name, durationHours, durationMinutes, description} = recipe;
+  const {icon, color} = CATEGORIES[category];
 
   return(
       <View style={styles.item}>
         <View style={styles.left}>
+          <MaterialIcons name={icon} size={25} color={color}/>
           <Text style={styles.duration}>{durationFormat(durationHours, durationMinutes)}</Text>
         </View>
 
