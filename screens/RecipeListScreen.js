@@ -49,7 +49,7 @@ function RecipeItem({recipe, onPress}){
 
 
 export default function RecipeListScreen({navigation, route}){
-  const [recipes, setReceipes] = useState([]);
+  const [recipes, setReceipes] = useState(SEED);
 
   useEffect(() => {
     const recipe = route.params?.recipe;
