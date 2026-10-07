@@ -1,30 +1,28 @@
 import { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View, TouchableHighlight, TouchableOpacity} from 'react-native';
-import HighlightButton from '../components/HighlightButton';
 import ToastManager, {Toast} from 'toastify-react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const SEED = [
-    {id : '1', category: 1, name: "Pancakes", durationHours: 0, durationMinutes: 20, description: "ppppppppppppppppp"},
-    {id : '2', category: 2, name: "Burger", durationHours: 1, durationMinutes: 30, description: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
-    {id : '3', category: 3, name: "Lasagne", durationHours: 2, durationMinutes: 0, description: "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"},
-    {id : '4', category: 1, name: "Café", durationHours: 0, durationMinutes: 5, description: "ccccccccccccccccc"},
-    {id : '5', category: 2, name: "Salade", durationHours: 0, durationMinutes: 15, description: "ssssssssssssssss"},
-    {id : '6', category: 3, name: "Poulet", durationHours: 1, durationMinutes: 40, description: "aaaaaaaaaaaaaaaaa"},
-    {id : '7', category: 3, name: "Pizza", durationHours: 1, durationMinutes: 10, description: "zzzzzzzzzzzzzzzzzz"},
-    {id : '8', category: 1, name: "Vanille française", durationHours: 0, durationMinutes: 8, description: "vvvvvvvvvvvvvvv"},
-    {id : '9', category: 2, name: "Wrap", durationHours: 0, durationMinutes: 45, description: "wwwwwwwwwwwwwwwwww"},
-    {id : '10', category: 1, name: "oeuf", durationHours: 0, durationMinutes: 10, description: "oooooooooooooooooo"}
-  ]
+  {id : '1', category: 1, name: "Pancakes", durationHours: 0, durationMinutes: 20, description: "ppppppppppppppppp"},
+  {id : '2', category: 2, name: "Burger", durationHours: 1, durationMinutes: 30, description: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  {id : '3', category: 3, name: "Lasagne", durationHours: 2, durationMinutes: 0, description: "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"},
+  {id : '4', category: 1, name: "Café", durationHours: 0, durationMinutes: 5, description: "ccccccccccccccccc"},
+  {id : '5', category: 2, name: "Salade", durationHours: 0, durationMinutes: 15, description: "ssssssssssssssss"},
+  {id : '6', category: 3, name: "Poulet", durationHours: 1, durationMinutes: 40, description: "aaaaaaaaaaaaaaaaa"},
+  {id : '7', category: 3, name: "Pizza", durationHours: 1, durationMinutes: 10, description: "zzzzzzzzzzzzzzzzzz"},
+  {id : '8', category: 1, name: "Vanille française", durationHours: 0, durationMinutes: 8, description: "vvvvvvvvvvvvvvv"},
+  {id : '9', category: 2, name: "Wrap", durationHours: 0, durationMinutes: 45, description: "wwwwwwwwwwwwwwwwww"},
+  {id : '10', category: 1, name: "oeuf", durationHours: 0, durationMinutes: 10, description: "oooooooooooooooooo"}
+]
 
-  const CATEGORIES = {
-    1: {icon: 'free-breakfast', color: 'orange'},
-    2: {icon: 'lunch-dining', color: 'lime'},
-    3: {icon: 'dinner-dining', color: 'blue'},
-  };
+const CATEGORIES = {
+  1: {icon: 'free-breakfast', color: 'orange'},
+  2: {icon: 'lunch-dining', color: 'lime'},
+  3: {icon: 'dinner-dining', color: 'blue'},
+};
 
-
-  function durationFormat(hours, minutes){
+function durationFormat(hours, minutes) {
   return `${hours}h${String(minutes).padStart(2, '0')}`;
 }
 
@@ -51,12 +49,13 @@ function RecipeItem({recipe, onPress}){
 
 
 export default function RecipeListScreen({navigation, route}){
-  const [recipes, setReceipes] = useState(SEED);
+  const [recipes, setReceipes] = useState([]);
 
   useEffect(() => {
     const recipe = route.params?.recipe;
     if(recipe != undefined){
-      setReceipes([...recipes, recipe])
+      const newRecipe = { ...recipe, id: Math.random().toString(16).substring(2) };
+      setReceipes([...recipes, newRecipe])
       Toast.info("Recette ajouté avec succès");
     }
   }, [route.params])
@@ -68,7 +67,7 @@ export default function RecipeListScreen({navigation, route}){
   const sortedRecipes = [...recipes].sort((r1, r2) => r1.name.localeCompare(r2.name));
 
   return(
-    <View style = {styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={sortedRecipes}
         renderItem={({item}) => (
@@ -96,20 +95,20 @@ export default function RecipeListScreen({navigation, route}){
 const styles = StyleSheet.create({
 
   container: {
-    flex : 1,
+    flex: 1,
     width: '100%',
     backgroundColor: "#387E7F",
   },
 
   item: {
-    flexDirection : 'row',
+    flexDirection: 'row',
     gap: 12,
     paddingVertical: 12,
     paddingHorizontal: 8,
   },
 
   empty: {
-    flex : 1,
+    flex: 1,
     alignItems : 'center',
     justifyContent : 'center',
   },
@@ -135,34 +134,32 @@ const styles = StyleSheet.create({
   },
 
   name: {
-  color: 'white',
-  fontWeight: 'bold',
-  fontSize: 20,
-},
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
 
-description: {
-  color: 'lightgray',
-  fontSize: 15,
-},
+  description: {
+    color: 'lightgray',
+    fontSize: 15,
+  },
 
-duration: {
+  duration: {
     color: 'lightgray',
     fontWeight: 'bold',
     fontSize: 15,
   },
 
   plus: {
-  position: 'absolute',
-  right: 16,
-  bottom: 16,
-  width: 56,
-  height: 56,
-  borderRadius: 28,
-  backgroundColor: 'orange',
-  justifyContent: 'center',
-  alignItems: 'center',
-  elevation: 6,
+    position: 'absolute',
+    right: 16,
+    bottom: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'orange',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 6,
   },
-
-
 });

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { RadioGroup } from 'react-native-radio-buttons-group';
 import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from 'react';
@@ -8,12 +8,16 @@ import EMPTY_RECIPE from '../model/recipe';
 import ToastManager, {Toast} from 'toastify-react-native';
 
 export default function RecipeScreen({navigation, route}) {
-  const options = [
-    { id: 1, label: 'Breakfast', value: '1', labelStyle: { color: 'white' }, borderColor: 'white' },
-    { id: 2, label: 'Lunch', value: '2', labelStyle: { color: 'white' }, borderColor: 'white' },
-    { id: 3, label: 'Dinner', value: '3', labelStyle: { color: 'white' }, borderColor: 'white' }
-  ];
 
+  const categories = ['Breakfast', 'Lunch', 'Dinner'];
+
+  const categoryOptions = categories.map((label, index) => ({
+    id: index + 1,
+    label,
+    labelStyle: {color: 'white'},
+    borderColor: 'white'
+  }));
+  
   const hourOptions = Array.from({ length: 13 }, (_, i) => ({
     id: i,
     label: `${i} h`,
@@ -25,7 +29,6 @@ export default function RecipeScreen({navigation, route}) {
     label: `${i} mins`,
     value: i,
   }));
-
 
   const [recipe, setRecipe] = useState(EMPTY_RECIPE);
 
@@ -51,7 +54,6 @@ export default function RecipeScreen({navigation, route}) {
       errors += "La catégorie est requise!\n"
     }
 
-    console.log(recipe)
     if(recipe.durationHours == 0 && recipe.durationMinutes == 0){
       errors += "La durée doit être > 0"
     }
@@ -70,7 +72,7 @@ export default function RecipeScreen({navigation, route}) {
 
   return (
     <View style={styles.recipe_content}>
-      <RadioGroup radioButtons={options} layout='row' containerStyle={{justifyContent: "space-between", marginTop: 20}} onPress ={(category) => setRecipe({ ...recipe, category })} selectedId = {recipe.category}/>
+      <RadioGroup radioButtons={categoryOptions} layout='row' containerStyle={{justifyContent: "space-between", marginTop: 20}} onPress ={(category) => setRecipe({ ...recipe, category })} selectedId = {recipe.category}/>
 
       <InputText placeholder='Name' onChangeText={(name) => setRecipe({ ...recipe, name })} value = {recipe.name}/>
 
