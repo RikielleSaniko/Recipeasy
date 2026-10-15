@@ -1,4 +1,5 @@
 import User from '../model/user.js'
+import {AUTH} from './cred'
 
 class AuthService {
     #currentUser = null // ATTENTION, à utiliser judicieusement
@@ -12,7 +13,7 @@ class AuthService {
             method: 'POST',
             body: JSON.stringify(credentials),
             headers: {
-                'auth': 'cmlraWVsbGU6c2FkZnNkIWFmZHNhZlNERlNERmRzYWZkYXNmd2VyZXdyNDM1NGFzZGZkYXM='
+                'auth': AUTH
             }
         }).then((r) => r.json())
 
@@ -28,7 +29,7 @@ class AuthService {
             method: 'POST',
             body: JSON.stringify(credentials),
             headers: {
-                'auth': 'cmlraWVsbGU6c2FkZnNkIWFmZHNhZlNERlNERmRzYWZkYXNmd2VyZXdyNDM1NGFzZGZkYXM='
+                'auth': AUTH
             }
         }).then((r) => r.json())
 
