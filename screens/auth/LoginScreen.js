@@ -26,8 +26,7 @@ export default function LoginScreen({navigation}){
         Toast.error("Identifiants invalides !");
       }
     }
-    catch(e){
-      console.log(e.message)
+    catch{
       Toast.error("Erreur de serveur");
     }
   }
