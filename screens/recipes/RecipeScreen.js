@@ -65,7 +65,12 @@ export default function RecipeScreen({navigation, route}) {
     }
 
   try {
-    await RecipeService.create(recipe);
+    if(ajout){
+      await RecipeService.create(recipe);
+    }
+    else{
+      await RecipeService.update(recipe);
+    }
     navigation.popTo('RecipeList');
   }
   catch (e) {
@@ -122,14 +127,17 @@ export default function RecipeScreen({navigation, route}) {
         value = {recipe.description}
         multiline={true}
         placeholder='Description'
-        style={styles.textarea}/>
+        style={styles.textarea}
+      />
 
-        { ajout ? (
-          <HighlightButton label="Save" onPress={handleSave} />
-        ):(
-          <HighlightButton label="Delete" backgroundColor='red' onPress={handleDelete} />
-        )}
-      <ToastManager/>
+      <View style={styles.button}>
+        <HighlightButton label="Save" onPress={handleSave} />
+      { !ajout && (
+        <HighlightButton label="Delete" backgroundColor='red' onPress={handleDelete} />
+      )}
+      </View>
+
+    <ToastManager/>
     </View>
   );
 }
@@ -165,5 +173,11 @@ const styles = StyleSheet.create({
     flex: 1,
     color: 'white',
     padding: 7,
-  }
+  },
+
+  button: {
+    flexDirection: 'row',
+    gap: 16,
+    justifyContent: 'center'
+  },
 });
