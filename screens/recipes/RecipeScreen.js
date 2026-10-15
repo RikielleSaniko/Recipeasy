@@ -6,6 +6,7 @@ import HighlightButton from '../../components/HighlightButton';
 import InputText from '../../components/InputText';
 import EMPTY_RECIPE from '../../model/recipe';
 import ToastManager, {Toast} from 'toastify-react-native';
+import RecipeService from '../../services/recipes';
 
 export default function RecipeScreen({navigation, route}) {
 
@@ -42,11 +43,11 @@ export default function RecipeScreen({navigation, route}) {
 
   const ajout = route.params?.recipe == undefined;
 
-  function handleSave(){
+  async function handleSave(){
 
     let errors = ""
 
-    if(recipe.name == ""){
+    if(recipe.name.trim()== ""){
       errors += "Le nom est requis!\n"
     }
 
@@ -58,12 +59,19 @@ export default function RecipeScreen({navigation, route}) {
       errors += "La durée doit être > 0"
     }
 
-    if(errors == ""){
-      navigation.popTo('RecipeList', {recipe});
+    if(errors !== ""){
+      Toast.info(errors);
+      return;
     }
-    else{
-      Toast.info(errors)
-    }
+
+  try {
+    await RecipeService.create(recipe);
+    navigation.popTo('RecipeList');
+  }
+  catch (e) {
+    console.log(e.message);
+    Toast.error("Impossible d'enregistrer la recette");
+  }
   }
 
   function handleDelete(){

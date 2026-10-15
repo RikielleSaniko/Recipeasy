@@ -1,44 +1,45 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ToastManager, {Toast} from 'toastify-react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import RecipeItem from './RecipeItem';
-
-const SEED = [
-  {id : '1', category: 1, name: "Pancakes", durationHours: 0, durationMinutes: 20, description: "ppppppppppppppppp"},
-  {id : '2', category: 2, name: "Burger", durationHours: 1, durationMinutes: 30, description: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
-  {id : '3', category: 3, name: "Lasagne", durationHours: 2, durationMinutes: 0, description: "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"},
-  {id : '4', category: 1, name: "Café", durationHours: 0, durationMinutes: 5, description: "ccccccccccccccccc"},
-  {id : '5', category: 2, name: "Salade", durationHours: 0, durationMinutes: 15, description: "ssssssssssssssss"},
-  {id : '6', category: 3, name: "Poulet", durationHours: 1, durationMinutes: 40, description: "aaaaaaaaaaaaaaaaa"},
-  {id : '7', category: 3, name: "Pizza", durationHours: 1, durationMinutes: 10, description: "zzzzzzzzzzzzzzzzzz"},
-  {id : '8', category: 1, name: "Vanille française", durationHours: 0, durationMinutes: 8, description: "vvvvvvvvvvvvvvv"},
-  {id : '9', category: 2, name: "Wrap", durationHours: 0, durationMinutes: 45, description: "wwwwwwwwwwwwwwwwww"},
-  {id : '10', category: 1, name: "oeuf", durationHours: 0, durationMinutes: 10, description: "oooooooooooooooooo"}
-]
+import RecipeService from '../../services/recipes';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function RecipeListScreen({navigation, route}){
-  const [recipes, setReceipes] = useState(SEED);
+  const [recipes, setReceipes] = useState([]);
 
-  useEffect(() => {
-    const recipe = route.params?.recipe;
-    if(recipe != undefined){
-      const newRecipe = { ...recipe, id: Math.random().toString(16).substring(2) };
-      setReceipes([...recipes, newRecipe])
-      Toast.info("Recette ajouté avec succès");
-    }
-  }, [route.params])
+  const refresh = useCallback(() =>{
+    let cancelled = false;
+
+    const asyncRefresh = async () => {
+      try {
+        const list = await RecipeService.list();
+
+        if(!cancelled){
+          setReceipes(list);
+        }
+      }
+      catch{
+        Toast.error("Impossible de charger les recettes");
+      }
+    };
+
+    asyncRefresh();
+
+    return () => {cancelled = true; }
+  }, []);
+
+  useFocusEffect(refresh);
 
   function handleAdd() {
     navigation.navigate('RecipeForm');
   }
 
-  const sortedRecipes = [...recipes].sort((r1, r2) => r1.name.localeCompare(r2.name));
-
   return(
     <View style={styles.container}>
       <FlatList
-        data={sortedRecipes}
+        data={recipes}
         renderItem={({item}) => (
           <RecipeItem 
             recipe={item}
@@ -56,7 +57,7 @@ export default function RecipeListScreen({navigation, route}){
       <TouchableOpacity style={styles.plus} onPress={handleAdd}>
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
-      <ToastManager/>
+      <ToastManager />
     </View>
   );
 }
@@ -67,13 +68,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: "#387E7F",
-  },
-
-  item: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 8,
   },
 
   empty: {
@@ -91,32 +85,6 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: 'lightgray',
-  },
-
-  left: {
-    alignItems: 'center',
-    width: 48,
-  },
-
-  right: {
-    flex: 1,
-  },
-
-  name: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-
-  description: {
-    color: 'lightgray',
-    fontSize: 15,
-  },
-
-  duration: {
-    color: 'lightgray',
-    fontWeight: 'bold',
-    fontSize: 15,
   },
 
   plus: {

@@ -34,6 +34,35 @@ class RecipeService{
       })
     );
   }
+
+  async create(recipe){
+    const user = AuthService.currentUser;
+
+    if(!user){
+      throw new Error("Utilisateur non connecté !")
+    }
+
+    const response = await fetch("http://martha.jh.shawinigan.info/queries/insert-recipe/execute", {
+      method: 'POST',
+      body: JSON.stringify({
+        category: recipe.category,
+        name: recipe.name.trim(),
+        duration_hours: recipe.durationHours,
+        duration_minutes: recipe.durationMinutes,
+        description: recipe.description,
+        user_id: user.id
+      }),
+      headers: {
+        'auth': AUTH
+      }
+    }).then((r) => r.json())
+
+    if (!response.success) {
+      throw new Error(response.error);
+    }
+
+    return response.lastInsertId;
+  }
 }
 
 const service = new RecipeService();
