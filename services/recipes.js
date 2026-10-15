@@ -91,6 +91,29 @@ class RecipeService{
       throw new Error(response.error);
     }
   }
+
+  async remove(recipe){
+    const user = AuthService.currentUser;
+
+    if(!user){
+      throw new Error("Utilisateur non connecté !")
+    }
+
+    const response = await fetch("http://martha.jh.shawinigan.info/queries/delete-recipe/execute", {
+      method: 'POST',
+      body: JSON.stringify({
+        id: recipe.id,
+        user_id: user.id
+      }),
+      headers: {
+        'auth': AUTH
+      }
+    }).then((r) => r.json())
+
+    if (!response.success) {
+      throw new Error(response.error);
+    }
+  }
 }
 
 const service = new RecipeService();

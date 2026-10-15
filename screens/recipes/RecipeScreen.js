@@ -79,8 +79,15 @@ export default function RecipeScreen({navigation, route}) {
   }
   }
 
-  function handleDelete(){
-    navigation.popTo('RecipeList')
+  async function handleDelete(){
+    try {
+      await RecipeService.remove(recipe);
+      navigation.popTo('RecipeList');
+    }
+    catch (e) {
+      console.log(e.message);
+      Toast.error("Impossible de supprimer la recette");
+    }
   }
 
   return (
