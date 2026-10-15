@@ -5,13 +5,13 @@ import AccountScreen from './screens/auth/AccountScreen';
 import RecipeScreen from './screens/recipes/RecipeScreen';
 import RecipeListScreen from './screens/recipes/RecipeListScreen';
 import { Text, TouchableOpacity} from 'react-native';
+import AuthService from './services/auth';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-     
-        <NavigationContainer>
+    <NavigationContainer>
       <Stack.Navigator 
         initialRouteName="Login"
         screenOptions={{
@@ -30,13 +30,18 @@ export default function App() {
           options={({ navigation }) => ({
             headerBackVisible: false,
             headerRight: () => (
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <TouchableOpacity 
+                onPress={() => {
+                  AuthService.logOut();
+                  navigation.navigate('Login')
+                }}
+              >
                 <Text style={{ color: 'white', marginRight: 8 }}>Log out</Text>
               </TouchableOpacity>
             )
           })}
         />
-        </Stack.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
