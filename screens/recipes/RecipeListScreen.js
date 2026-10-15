@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableHighlight, TouchableOpacity} from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ToastManager, {Toast} from 'toastify-react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import RecipeItem from './RecipeItem';
 
 const SEED = [
   {id : '1', category: 1, name: "Pancakes", durationHours: 0, durationMinutes: 20, description: "ppppppppppppppppp"},
@@ -15,38 +16,6 @@ const SEED = [
   {id : '9', category: 2, name: "Wrap", durationHours: 0, durationMinutes: 45, description: "wwwwwwwwwwwwwwwwww"},
   {id : '10', category: 1, name: "oeuf", durationHours: 0, durationMinutes: 10, description: "oooooooooooooooooo"}
 ]
-
-const CATEGORIES = {
-  1: {icon: 'free-breakfast', color: 'orange'},
-  2: {icon: 'lunch-dining', color: 'lime'},
-  3: {icon: 'dinner-dining', color: 'blue'},
-};
-
-function durationFormat(hours, minutes) {
-  return `${hours}h${String(minutes).padStart(2, '0')}`;
-}
-
-function RecipeItem({recipe, onPress}){
-  const {category, name, durationHours, durationMinutes, description} = recipe;
-  const {icon, color} = CATEGORIES[category];
-
-  return(
-    <TouchableHighlight onPress={onPress} underlayColor="lightgray">
-      <View style={styles.item}>
-        <View style={styles.left}>
-          <MaterialIcons name={icon} size={25} color={color}/>
-          <Text style={styles.duration}>{durationFormat(durationHours, durationMinutes)}</Text>
-        </View>
-
-        <View style={styles.right}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.description} numberOfLines={1}>{description}</Text>
-        </View>
-      </View>
-    </TouchableHighlight>
-  );
-}
-
 
 export default function RecipeListScreen({navigation, route}){
   const [recipes, setReceipes] = useState(SEED);

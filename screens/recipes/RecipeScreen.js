@@ -2,9 +2,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { RadioGroup } from 'react-native-radio-buttons-group';
 import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from 'react';
-import HighlightButton from '../components/HighlightButton';
-import InputText from '../components/InputText';
-import EMPTY_RECIPE from '../model/recipe';
+import HighlightButton from '../../components/HighlightButton';
+import InputText from '../../components/InputText';
+import EMPTY_RECIPE from '../../model/recipe';
 import ToastManager, {Toast} from 'toastify-react-native';
 
 export default function RecipeScreen({navigation, route}) {
@@ -119,7 +119,7 @@ export default function RecipeScreen({navigation, route}) {
         { ajout ? (
           <HighlightButton label="Save" onPress={handleSave} />
         ):(
-          <HighlightButton label="Delete" onPress={handleDelete} />
+          <HighlightButton label="Delete" backgroundColor='red' onPress={handleDelete} />
         )}
       <ToastManager/>
     </View>

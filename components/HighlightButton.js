@@ -1,10 +1,10 @@
 import {TouchableHighlight } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function HighlightButton({label, onPress}){
+export default function HighlightButton({label, onPress, backgroundColor = 'orange'}){
   return(
     <TouchableHighlight style={{alignSelf: 'center'}} onPress = {onPress}>
-      <View style={styles.button}>
+      <View style={[styles.button, {backgroundColor}]}>
         <Text style={{color: 'white'}}>{label}</Text>
       </View>
     </TouchableHighlight>
@@ -14,7 +14,6 @@ export default function HighlightButton({label, onPress}){
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: 'orange',
     paddingHorizontal: 20,
     padding: 10,
     borderRadius: 5,

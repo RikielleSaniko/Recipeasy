@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import HighlightButton from '../components/HighlightButton';
-import InputText from '../components/InputText';
+import HighlightButton from '../../components/HighlightButton';
+import InputText from '../../components/InputText';
 
 
 export default function LoginScreen({navigation}){

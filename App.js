@@ -1,13 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './screens/LoginScreen';
-import AccountScreen from './screens/AccountScreen';
-import RecipeScreen from './screens/RecipeScreen';
-import RecipeListScreen from './screens/RecipeListScreen';
-import { StyleSheet, Text, TouchableOpacity} from 'react-native';
+import LoginScreen from './screens/auth/LoginScreen';
+import AccountScreen from './screens/auth/AccountScreen';
+import RecipeScreen from './screens/recipes/RecipeScreen';
+import RecipeListScreen from './screens/recipes/RecipeListScreen';
+import { Text, TouchableOpacity} from 'react-native';
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   return (
