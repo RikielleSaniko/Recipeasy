@@ -1,43 +1,32 @@
-import User from '../model/user.js'
-import {AUTH} from './cred'
+import User from '../model/user.js';
+import martha from './martha.js';
 
 class AuthService {
-    #currentUser = null // ATTENTION, à utiliser judicieusement
-
+    #currentUser = null 
     get currentUser() {
         return this.#currentUser
     }
 
     async signUp(credentials) {
-        const response = await fetch("http://martha.jh.shawinigan.info/queries/insert-user/execute", {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: {
-                'auth': AUTH
-            }
-        }).then((r) => r.json())
+        try {
+            const response = await martha.execute("insert-user", credentials);
 
-        if (response.success)  {
-            this.#currentUser = new User({ id: response.lastInsertId, username: credentials.username })
+            this.#currentUser = new User({ id: response.lastInsertId, username: credentials.username });
+        } 
+        catch {
+            this.#currentUser = null;
         }
 
-        return !!this.#currentUser
+        return !!this.#currentUser;
     }
 
     async logIn(credentials) {
-        const response = await fetch("http://martha.jh.shawinigan.info/queries/select-user-auth/execute", {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: {
-                'auth': AUTH
-            }
-        }).then((r) => r.json())
+        const response = await martha.execute("select-user-auth", credentials)
 
-        if (response.success && response.data.length == 1)  {
+        if (response.data.length == 1)  {
             const user = response.data[0]
 
             this.#currentUser = new User({ id: user.id, username: user.username })
-            console.log(JSON.stringify(this.#currentUser))
         } else {
             this.#currentUser = null
         }
@@ -51,5 +40,5 @@ class AuthService {
 
 }
 
-const service = new AuthService();
-export default service;
+const authService = new AuthService();
+export default authService;

@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import HighlightButton from '../../components/HighlightButton';
 import InputText from '../../components/InputText';
-import {useState} from 'react';
-import AuthService from '../../services/auth';
-import UserCredentials from '../../model/user-credentials';
 import ToastManager, { Toast } from 'toastify-react-native';
-
+import {useState} from 'react';
+import authService from '../../services/auth';
+import UserCredentials from '../../model/user-credentials';
 
 export default function LoginScreen({navigation}){
   const [credentials, setCredentials] = useState(new UserCredentials({username: '', password: ''}))
@@ -17,7 +16,7 @@ export default function LoginScreen({navigation}){
     }
 
     try{
-      const success = await AuthService.logIn(credentials)
+      const success = await authService.logIn(credentials)
       if (success){
         setCredentials(new UserCredentials({username: '', password: ''}))
         navigation.navigate('RecipeList');
@@ -31,23 +30,23 @@ export default function LoginScreen({navigation}){
     }
   }
   return(
-        <View style={styles.container}>
-          <InputText 
-            placeholder = "Username"
-            value = { credentials.username }
-            onChangeText = { text => setCredentials(new UserCredentials({...credentials, username: text })) }
-          />
-          <InputText 
-            placeholder = "Password"
-            value = { credentials.password }
-            onChangeText = { text => setCredentials(new UserCredentials({...credentials, password: text })) }
-          />
-          <HighlightButton label= "Login" onPress = {handleLogin}/>
-          <TouchableOpacity onPress = {() => navigation.navigate('SignUp')}>
-          <Text style = {styles.text}> Sign up! </Text>
-          </TouchableOpacity>
-          <ToastManager />
-        </View>
+    <View style={styles.container}>
+      <InputText 
+        placeholder = "Username"
+        value = { credentials.username }
+        onChangeText = { text => setCredentials(new UserCredentials({...credentials, username: text })) }
+      />
+      <InputText 
+        placeholder = "Password"
+        value = { credentials.password }
+        onChangeText = { text => setCredentials(new UserCredentials({...credentials, password: text })) }
+      />
+      <HighlightButton label= "Login" onPress = {handleLogin}/>
+      <TouchableOpacity onPress = {() => navigation.navigate('SignUp')}>
+      <Text style = {styles.text}> Sign up! </Text>
+      </TouchableOpacity>
+      <ToastManager />
+    </View>
   );
 }
 

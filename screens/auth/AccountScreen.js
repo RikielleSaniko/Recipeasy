@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import HighlightButton from '../../components/HighlightButton';
 import InputText from '../../components/InputText';
 import {useState} from 'react';
-import AuthService from '../../services/auth';
+import authService from '../../services/auth';
 import UserCredentials from '../../model/user-credentials';
 import ToastManager, { Toast } from 'toastify-react-native';
 
@@ -22,7 +22,7 @@ export default function AccountScreen({navigation}){
     }
 
     try{
-      const success = await AuthService.signUp(credentials)
+      const success = await authService.signUp(credentials)
 
       if(success){
         navigation.navigate('RecipeList')

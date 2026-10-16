@@ -1,6 +1,7 @@
 import {AUTH} from './cred';
 import AuthService from './auth';
 import {Recipe} from '../model/recipe';
+import martha from './martha';
 
 class RecipeService{
 
@@ -10,19 +11,7 @@ class RecipeService{
     if(!user){
       throw new Error("Utilisateur non connecté !")
     }
-
-    const response = await fetch("http://martha.jh.shawinigan.info/queries/select-recipes/execute", {
-      method: 'POST',
-      body: JSON.stringify({id: user.id}),
-      headers: {
-        'auth': AUTH
-      }
-    }).then((r) => r.json())
-
-    if (!response.success) {
-      throw new Error(response.error);
-    }
-
+    const response = await martha.execute("select-recipes", {id: user.id})
     return response.data.map(({id, category, name, duration_hours, duration_minutes, description}) =>
       new Recipe({
         id,
@@ -116,5 +105,5 @@ class RecipeService{
   }
 }
 
-const service = new RecipeService();
-export default service;
+const recipeService = new RecipeService();
+export default recipeService;

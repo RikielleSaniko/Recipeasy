@@ -73,8 +73,7 @@ export default function RecipeScreen({navigation, route}) {
     }
     navigation.popTo('RecipeList');
   }
-  catch (e) {
-    console.log(e.message);
+  catch{
     Toast.error("Impossible d'enregistrer la recette");
   }
   }
@@ -84,8 +83,7 @@ export default function RecipeScreen({navigation, route}) {
       await RecipeService.remove(recipe);
       navigation.popTo('RecipeList');
     }
-    catch (e) {
-      console.log(e.message);
+    catch{
       Toast.error("Impossible de supprimer la recette");
     }
   }

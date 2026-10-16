@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 import ToastManager, {Toast} from 'toastify-react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import RecipeItem from './RecipeItem';
-import RecipeService from '../../services/recipes';
+import recipeService from '../../services/recipes';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function RecipeListScreen({navigation, route}){
@@ -14,8 +14,8 @@ export default function RecipeListScreen({navigation, route}){
 
     const asyncRefresh = async () => {
       try {
-        const list = await RecipeService.list();
-
+        const list = await recipeService.list();
+        
         if(!cancelled){
           setReceipes(list);
         }
